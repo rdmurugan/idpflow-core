@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "lendstack": {
+      "command": "lendstack-core",
+      "env": {
+        "VISION_AGENT_API_KEY": "your-landingai-key-or-omit-for-stub-mode"
+      }
+    }
+  }
+}

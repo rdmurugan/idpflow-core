@@ -11,3 +11,5 @@ samples/
 loan_files/
 # Rendered underwriter packages (contain loan data)
 out/
+examples/sample_docs/
+examples/out/
