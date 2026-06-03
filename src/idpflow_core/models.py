@@ -8,7 +8,6 @@ outputs are auditable. ADE's grounding is what makes this possible.
 from __future__ import annotations
 
 from enum import Enum
-from typing import Optional
 
 from pydantic import BaseModel, Field
 
@@ -47,7 +46,7 @@ class Provenance(BaseModel):
     """Where a value came from — the audit trail."""
 
     page: int = Field(description="1-indexed page number the value was found on.")
-    bbox: Optional[BoundingBox] = Field(default=None, description="Bounding box on the page.")
+    bbox: BoundingBox | None = Field(default=None, description="Bounding box on the page.")
     source_doc_type: DocType = Field(description="Document type the value was extracted from.")
 
 
@@ -60,11 +59,11 @@ class ExtractedField(BaseModel):
     """
 
     name: str
-    value: Optional[str]
+    value: str | None
     grounded: bool = False
     references: list[str] = Field(default_factory=list)
-    confidence: Optional[float] = Field(default=None, ge=0.0, le=1.0)
-    provenance: Optional[Provenance] = None
+    confidence: float | None = Field(default=None, ge=0.0, le=1.0)
+    provenance: Provenance | None = None
     needs_review: bool = False
 
 
@@ -73,7 +72,7 @@ class DocumentExtraction(BaseModel):
     page_count: int
     overall_confidence: float = Field(ge=0.0, le=1.0)
     fields: list[ExtractedField]
-    raw_markdown: Optional[str] = None
+    raw_markdown: str | None = None
     review_required: bool
     warnings: list[str] = Field(default_factory=list)
 
@@ -87,7 +86,7 @@ class DocInput(BaseModel):
     """One document to process. doc_type is optional — if omitted, it is classified."""
 
     file_path: str
-    doc_type: Optional[str] = None
+    doc_type: str | None = None
 
 
 class StackItem(BaseModel):
@@ -95,7 +94,7 @@ class StackItem(BaseModel):
     doc_type: DocType
     file_path: str
     in_profile: bool
-    overall_confidence: Optional[float] = None
+    overall_confidence: float | None = None
     review_required: bool = False
 
 
@@ -114,11 +113,11 @@ class ClassifyResult(BaseModel):
 
 class KeyField(BaseModel):
     name: str
-    value: Optional[str]
-    confidence: Optional[float]
+    value: str | None
+    confidence: float | None
     grounded: bool
     source_doc: DocType
-    page: Optional[int]
+    page: int | None
     needs_review: bool
 
 

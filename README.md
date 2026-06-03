@@ -1,5 +1,6 @@
 # idpflow-core
 
+[![CI](https://github.com/rdmurugan/idpflow-core/actions/workflows/ci.yml/badge.svg)](https://github.com/rdmurugan/idpflow-core/actions/workflows/ci.yml)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)](pyproject.toml)
 [![MCP server](https://img.shields.io/badge/MCP-server-7c3aed.svg)](https://modelcontextprotocol.io)

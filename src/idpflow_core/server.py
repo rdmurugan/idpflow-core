@@ -18,11 +18,9 @@ from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
 from . import stacking as S
-from .auth import build_auth
 from .ade_client import ADEClient
+from .auth import build_auth
 from .classify import classify_document
-from .package import build_package
-from .render import render_package
 from .models import (
     ClassifyResult,
     DocInput,
@@ -32,6 +30,8 @@ from .models import (
     RenderedPackage,
     StackResult,
 )
+from .package import build_package
+from .render import render_package
 
 load_dotenv()
 
@@ -70,7 +70,7 @@ def extract_document(file_path: str, doc_type: str) -> DocumentExtraction:
         dt = DocType(doc_type)
     except ValueError:
         valid = ", ".join(d.value for d in DocType)
-        raise ValueError(f"Unknown doc_type '{doc_type}'. Use one of: {valid}")
+        raise ValueError(f"Unknown doc_type '{doc_type}'. Use one of: {valid}") from None
     return _ade.extract(file_path, dt)
 
 

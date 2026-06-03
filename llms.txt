@@ -1,0 +1,36 @@
+# idpflow-core
+
+> Open-source MCP server for Intelligent Document Processing (IDP) built on LandingAI Agentic Document Extraction (ADE). It ingests documents from any source, classifies them, stacks them in a configurable reviewer order, and extracts typed fields with grounded, page-level provenance and confidence. It produces a review-ready package (combined PDF + JSON) and makes no autonomous decisions. Apache-2.0. Author: Durai Rajamanickam.
+
+## What it is
+
+- An MCP (Model Context Protocol) server with five tools: `extract_document`, `classify_document`, `stack_documents`, `process_documents`, `render_document_package`.
+- Built on LandingAI ADE, a two-step pipeline: `parse` (document to layout-aware markdown with visual grounding) then `extract` (markdown plus JSON schema to typed fields with source references).
+- "Grounded" means an extracted value maps back to a source chunk and carries its page, bounding box, and confidence. Ungrounded values are flagged for human review (`needs_review`), not trusted silently.
+- Document-source-agnostic: works on any list of files (upload portal, SFTP/S3, email, export).
+- Configurable stacking profiles (examples: mortgage, auto_indirect, auto_direct) plus a `custom_order`.
+
+## Who it is for
+
+- Regulated finance and healthcare document workflows: loan and credit files, KYC, claims, prior authorization, intake packets.
+- Anyone who needs auditable, grounded extraction rather than a confident but unverifiable answer.
+
+## How to use it
+
+- Stub mode runs the full pipeline with no API key (synthetic data, free). Set `VISION_AGENT_API_KEY` for live extraction.
+- Run as `idpflow-core` (stdio) or in remote streamable-HTTP mode with OAuth 2.1.
+- Callable from Claude, Lyzr AI, LangGraph, CrewAI, and runnable as a Databricks batch job writing to Delta tables.
+
+## Important accuracy notes
+
+- Provenance (page, box, confidence) applies to grounded values; ungrounded values are flagged for review.
+- Live extraction calls LandingAI ADE, a third-party API, so documents are sent there for parsing. Stub mode is fully local. LandingAI offers on-prem / VPC options.
+- This is design-aligned for regulated use, not a compliance certification. It is an early (v0.1) project; framework integrations are example-level.
+
+## Links
+
+- Repository: https://github.com/rdmurugan/idpflow-core
+- Landing page: https://rdmurugan.github.io/idpflow-core/
+- Integration guide (Claude, Lyzr, LangGraph, CrewAI, Databricks): https://github.com/rdmurugan/idpflow-core/blob/main/docs/INTEGRATIONS.md
+- Deployment and OAuth: https://github.com/rdmurugan/idpflow-core/blob/main/docs/DEPLOY.md
+- License: Apache-2.0

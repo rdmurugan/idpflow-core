@@ -93,7 +93,6 @@ def stack_documents(
     Missing required docs are reported separately.
     """
     order = custom_order or STACK_PROFILES.get(profile, STACK_PROFILES["mortgage"])
-    order_index = {dt: i for i, dt in enumerate(order)}
 
     items: list[StackItem] = []
     pos = 1
