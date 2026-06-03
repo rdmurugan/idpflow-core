@@ -40,9 +40,11 @@ ADE is a network API — mind its rate limits and keep cluster concurrency reaso
 
 ## Data residency
 
-Because this runs **inside the customer's Databricks workspace**, loan documents and extracted
-PII never leave their boundary — the lakehouse is the trust boundary. This is the same
-deploy-in-the-customer's-environment posture as the remote MCP server.
+Because this runs **inside the customer's Databricks workspace**, the orchestration, stacking, and
+the Delta tables stay in their boundary. One honest caveat: **live extraction calls LandingAI ADE,
+a third-party API**, so documents are sent there for parsing. Stub mode (no key) is fully local.
+If documents must never leave the workspace, use a LandingAI on-prem / VPC ADE deployment where
+available. This is the same deploy-in-the-customer's-environment posture as the remote MCP server.
 
 ## Notes
 

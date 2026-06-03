@@ -50,6 +50,11 @@ and **exits immediately** if OAuth env is absent (unless `MCP_ALLOW_INSECURE=1`)
 
 ## Data residency
 
-Deploy this **inside the customer's environment** (their cloud / container service) so documents
-and extracted data never leave their boundary — the deployment boundary is the trust boundary.
-The customer points their own IdP + LandingAI key at the container.
+Deploy this **inside the customer's environment** (their cloud / container service) so the
+orchestration, stacking, storage, and the extracted data stay within their boundary. The customer
+points their own IdP and LandingAI key at the container.
+
+**One honest caveat:** live extraction calls **LandingAI ADE, a third-party API**, so documents
+are sent to LandingAI for parsing and extraction. They leave your boundary for that step. Stub
+mode (no key) is fully local. If documents must never leave your network, use a LandingAI
+on-prem / VPC ADE deployment where available, and treat ADE as a sub-processor in your DPA.

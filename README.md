@@ -9,11 +9,17 @@
 > **Intelligent Document Processing (IDP) as an MCP server, powered by [LandingAI ADE](https://va.landing.ai).**
 
 Ingest documents from anywhere, classify them, **stack them in your reviewer's exact order**,
-extract every field with **page-level provenance and confidence**, and render a review-ready
-package (PDF + JSON). Built for **regulated finance and healthcare**, where every value has to
-trace back to its source. Bring your own LandingAI key.
+extract fields with **grounding (page, bounding box, and confidence on grounded values)**, and
+render a review-ready package (PDF + JSON). Designed for **regulated finance and healthcare**
+workflows, where a value should trace back to its source. Bring your own LandingAI key.
 
 **Works with:** Claude · Lyzr AI · LangGraph · CrewAI · Databricks · any MCP client
+
+> **Status (v0.1, early).** The core pipeline is validated against live ADE. The framework
+> integrations are **example-level** (Claude stdio and the direct/MCP examples are run-tested;
+> the LangGraph and CrewAI examples are reference code), and because it is an MCP server it works
+> with any MCP-conformant client. This is **design-aligned** for regulated use, not a compliance
+> certification.
 
 ```
 documents (any source)  ─▶  classify  ─▶  extract (ADE, grounded)  ─▶  stack  ─▶  review package
@@ -29,8 +35,8 @@ keeps every value **grounded** so the output holds up where the stakes are real:
 - **ADE done right (two steps).** `parse` turns a document into layout-aware markdown with visual
   grounding, then `extract` maps a JSON schema to typed fields with source references. Every field
   points back to the page and box it came from.
-- **Groundedness is the audit signal.** A value that maps to a source chunk is examinable. An
-  ungrounded value is flagged for a human, automatically.
+- **Groundedness is the audit signal.** A grounded value carries its page, box, and confidence,
+  and is examinable. An ungrounded value is flagged for a human automatically, not trusted silently.
 - **Source-agnostic.** Works on any list of files, however they arrived.
 - **Configurable stacking.** Assemble a document set into the exact order a reviewer expects.
 - **Human-in-the-loop.** It surfaces grounded data for a person to act on. It makes no decisions.
@@ -80,11 +86,16 @@ Copy-paste setup for **Claude, Lyzr AI, LangGraph, CrewAI, and Databricks** is i
 
 The reason this is built the way it is:
 
-- **Provenance on every value** (page + box + confidence) gives you an examinable audit trail.
-- **No autonomous decisions.** Ungrounded or low-confidence values are flagged for human review.
-- **OAuth 2.1** on the remote server. It refuses to start unauthenticated.
-- **Deploy in your own environment** (your cloud, your Databricks workspace) so PII never leaves
-  your boundary. See [`docs/DEPLOY.md`](docs/DEPLOY.md).
+- **Provenance on grounded values** (page, box, confidence) gives you an examinable audit trail.
+  Ungrounded or low-confidence values are flagged, not trusted silently.
+- **No autonomous decisions.** The tools output data and a review queue. They never approve,
+  deny, score, or rank.
+- **OAuth 2.1** on the remote (streamable-HTTP) server. It refuses to start unauthenticated
+  (unless you explicitly set `MCP_ALLOW_INSECURE=1` behind your own gateway).
+- **Run it in your own environment** (your cloud, your Databricks workspace). One honest caveat:
+  **live extraction sends documents to LandingAI ADE, a third-party API**, so they leave your
+  boundary for parsing. **Stub mode is fully local.** If documents must never leave your network,
+  use a LandingAI on-prem/VPC ADE deployment where available. See [`docs/DEPLOY.md`](docs/DEPLOY.md).
 
 ## Databricks (batch / lakehouse)
 

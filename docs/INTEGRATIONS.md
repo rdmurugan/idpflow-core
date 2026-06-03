@@ -64,8 +64,9 @@ classify / extract / stack → Delta tables. See [`../databricks/`](../databrick
 # set VISION_AGENT_API_KEY from a Databricks secret, point at a Volume, run -> Delta tables
 ```
 
-Full setup in [`databricks/README.md`](../databricks/README.md). Runs inside the customer's
-workspace, so PII never leaves their boundary.
+Full setup in [`databricks/README.md`](../databricks/README.md). Orchestration and Delta tables
+stay in the customer's workspace; note that live extraction still calls LandingAI ADE (third-party
+API), so documents are sent there for parsing. Stub mode is fully local.
 
 ---
 
